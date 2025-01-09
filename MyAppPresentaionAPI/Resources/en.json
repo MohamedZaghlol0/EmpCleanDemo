@@ -1,0 +1,6 @@
+{
+  "EmployeeAddedSuccess": "Employee added successfully.",
+  "InvalidRequest": "Invalid request: Employee data cannot be null.",
+  "ValidationErrorOccurred": "Validation error occurred.",
+  "InternalServerError": "An internal server error occurred."
+}
