@@ -16,7 +16,7 @@ namespace MyAppPresentaionAPI.Controllers
     public class EmpController(ISender sender) : ControllerBase
     {
         [HttpPost("")]
-        public async Task<IActionResult> AddEmpAsync([FromBody] PostEmpDto empDto, [FromQuery] string lang = "en")
+        public async Task<IActionResult> AddEmpAsync([FromBody] PostEmpDto empDto, [FromQuery] string? lang = "en")
         {
             var localizer = HttpContext.RequestServices.GetService<LocalizationService>();
 
@@ -29,50 +29,36 @@ namespace MyAppPresentaionAPI.Controllers
                 });
             }
 
-            try
-            {
-                var result = await sender.Send(new AddEmpCommand(empDto));
+            var result = await sender.Send(new AddEmpCommand(empDto));
 
-                return result.Code switch
-                {
-                    "200" => Ok(new
-                    {
-                        result.Code,
-                        Message = localizer.GetLocalizedString("EmployeeAddedSuccess", lang),
-                        result.Data
-                    }),
-                    "422" => UnprocessableEntity(new
-                    {
-                        result.Code,
-                        Message = localizer.GetLocalizedString("ValidationErrorOccurred", lang),
-                        result.ValidationError
-                    }),
-                    "400" => BadRequest(new
-                    {
-                        result.Code,
-                        Message = localizer.GetLocalizedString("InvalidRequest", lang),
-                        result.Error
-                    }),
-                    _ => StatusCode(500, new
-                    {
-                        result.Code,
-                        Message = localizer.GetLocalizedString("InternalServerError", lang),
-                        result.Error
-                    })
-                };
-            }
-            catch (Exception ex)
+            return result.Code switch
             {
-                return StatusCode(500, new
+                "200" => Ok(new
                 {
-                    Code = "500",
+                    result.Code,
+                    Message = localizer.GetLocalizedString("EmployeeAddedSuccess", lang),
+                    result.Data
+                }),
+                "422" => UnprocessableEntity(new
+                {
+                    result.Code,
+                    Message = localizer.GetLocalizedString("ValidationErrorOccurred", lang),
+                    result.ValidationError
+                }),
+                "400" => BadRequest(new
+                {
+                    result.Code,
+                    Message = localizer.GetLocalizedString("InvalidRequest", lang),
+                    result.Error
+                }),
+                _ => StatusCode(500, new
+                {
+                    result.Code,
                     Message = localizer.GetLocalizedString("InternalServerError", lang),
-                    Error = ex.Message
-                });
-            }
+                    result.Error
+                })
+            };
         }
-
-
 
 
         [HttpGet]
@@ -85,11 +71,11 @@ namespace MyAppPresentaionAPI.Controllers
                 {
                     serviceResponse.Code = "200";
                     serviceResponse.Message = "Data returned successfully";
-                    return Ok(serviceResponse); 
+                    return Ok(serviceResponse);
                 }
                 else
                 {
-                    return BadRequest(serviceResponse); 
+                    return BadRequest(serviceResponse);
                 }
             }
             catch (Exception ex)
@@ -100,7 +86,7 @@ namespace MyAppPresentaionAPI.Controllers
                     Data = null,
                     Message = "An error occurred",
                     Error = ex.Message,
-                    ValidationError = "",
+                    // ValidationError = "",
                     //Error = ex.StackTrace,
                 });
             }
@@ -119,6 +105,5 @@ namespace MyAppPresentaionAPI.Controllers
             var result = await sender.Send(new DeleteEmpComm(employeeId));
             return Ok(result);
         }
-
     }
 }

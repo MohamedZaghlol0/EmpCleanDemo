@@ -1,19 +1,23 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using MyAppApplication.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MyAppApplication.Shared.Contracts;
+using MyAppDomain.Constatns;
 
 namespace MyAppInfrastructure.Validation
 {
     public class AddEmpCommandValidator : AbstractValidator<AddEmpCommand>
     {
-        public AddEmpCommandValidator()
+        // private readonly IStringLocalizer<AddEmpCommandValidator> _localizer;
+        private readonly ILocalizationService _localizer;
+
+        public AddEmpCommandValidator(ILocalizationService localizer)
         {
+            _localizer = localizer;
+
             RuleFor(x => x.Emp.Name)
-                .NotEmpty().WithMessage("Name is required.")
+                .NotEmpty().WithMessage(localizer.GetLocalizedString(LocalizeKeys.EmpNameFieldIsRequired))
+                .MinimumLength(0).WithMessage("Employee Name must not be empty.")
                 .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
 
             RuleFor(x => x.Emp.Email)
@@ -23,8 +27,6 @@ namespace MyAppInfrastructure.Validation
             RuleFor(x => x.Emp.Phone)
                 .Matches(@"^(\+?[0-9]{1,3})?([0-9]{10,15})$").WithMessage("Invalid phone number format.")
                 .When(x => !string.IsNullOrEmpty(x.Emp.Phone)); // Validate if provided
-
-
         }
     }
 }

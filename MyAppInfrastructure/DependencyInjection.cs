@@ -16,7 +16,9 @@ namespace MyAppInfrastructure
         public static IServiceCollection AddInfrastructureDI(this IServiceCollection services)
         {
             services.AddDbContext<AppDBcontext>(options =>
-            options.UseSqlServer("Server=MOHAMED;Database=CleanArchDemo;Trusted_Connection=True;TrustServerCertificate=True;\r\n"));
+                options.UseSqlServer(
+                    "Data Source=.; User ID=Sa; Password=@Qwe112233; Initial Catalog=CleanArchDemo; MultipleActiveResultSets=True; MultiSubnetFailover=True; TrustServerCertificate=True; Connection Timeout=30;"));
+
 
             services.AddScoped<IEmpRepo, EmpRepo>();
             return services;

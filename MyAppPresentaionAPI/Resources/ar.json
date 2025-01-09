@@ -2,5 +2,6 @@
   "EmployeeAddedSuccess": "تم اضافه الموظف بنجاح",
   "InvalidRequest": "طلب غير صالح: لا يمكن أن تكون بيانات الموظف فارغة.",
   "ValidationErrorOccurred": "حدث خطأ في التحقق.",
-  "InternalServerError": "حدث خطأ داخلي في الخادم."
+  "InternalServerError": "حدث خطأ داخلي في الخادم.",
+  "EmpNameFieldIsRequired": "حقل اسم الموظف مطلوب.",
 }

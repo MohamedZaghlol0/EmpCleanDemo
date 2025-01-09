@@ -4,9 +4,11 @@ using MyAppInfrastructure.Data;
 using MyAppInfrastructure.Validation;
 using MyAppPresentaionAPI;
 using FluentValidation;
+using MyAppApplication.Shared.Contracts;
 using MyAppDomain.Interfaces;
 using MyAppInfrastructure.Repositories;
 using MyAppInfrastructure;
+using MyAppPresentaionAPI.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +22,7 @@ builder.Services.AddAppDI();
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IEmpRepo, EmpRepo>();
-builder.Services.AddSingleton(provider =>
+builder.Services.AddSingleton<ILocalizationService>(provider =>
     new LocalizationService(Path.Combine(Directory.GetCurrentDirectory(), "Resources")));
 
 
@@ -46,6 +48,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
+
 app.MapControllers();
+
 
 app.Run();

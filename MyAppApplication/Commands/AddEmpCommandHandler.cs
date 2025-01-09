@@ -56,7 +56,7 @@ namespace MyAppApplication.Commands
             {
                 response.Code = "422";
                 response.Message = "Validation error occurred.";
-                response.ValidationError = ex.Message;
+                // response.ValidationError = ex.Message;
                 return response;
             }
             catch (Exception ex)

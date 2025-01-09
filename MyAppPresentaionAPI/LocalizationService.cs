@@ -5,22 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.IO;
+using MyAppApplication.Shared.Contracts;
 using Newtonsoft.Json;
 
 namespace MyAppPresentaionAPI
 {
-    public class LocalizationService
+    public class LocalizationService: ILocalizationService
     {
         private readonly string _resourcesPath;
-        private readonly string _defaultLanguage;
+        private readonly string? _defaultLanguage;
 
-        public LocalizationService(string resourcesPath, string defaultLanguage = "en")
+        public LocalizationService(string resourcesPath, string? defaultLanguage = "en")
         {
             _resourcesPath = resourcesPath;
             _defaultLanguage = defaultLanguage;
         }
 
-        public string GetLocalizedString(string key, string language = null)
+        public string GetLocalizedString(string key, string? language = null)
         {
             language ??= _defaultLanguage;
             var filePath = Path.Combine(_resourcesPath, $"{language}.json");
